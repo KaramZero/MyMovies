@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -80,6 +82,7 @@ public class FragmentB extends Fragment {
         ratingBar = view.findViewById(R.id.ratingBar);
         ratingBar.setNumStars(10);
 
+        if (FragmentA.moviesList.size()>0)
         change(index);
 
 
@@ -87,11 +90,6 @@ public class FragmentB extends Fragment {
 
     void change(int in){
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         Movie movie = FragmentA.moviesList.get(in);
 
         List<String> l = movie.getGenre();
@@ -104,7 +102,12 @@ public class FragmentB extends Fragment {
         genreTXTView.setText(builder.toString());
         ratingBar.setRating(movie.getRating());
 
-        handler = new Handler(Looper.myLooper()) {
+        Picasso.with(getContext()).
+                load(movie.getImage())
+                .into(imageView);
+
+
+       /* handler = new Handler(Looper.myLooper()) {
             @Override
             public void handleMessage(@NonNull Message msg) {
 
@@ -120,11 +123,11 @@ public class FragmentB extends Fragment {
                 bitmap = download(movie.getImage());
                 handler.sendEmptyMessage(0);
             }
-        }.start();
+        }.start();*/
 
 
     }
-
+/*
     Bitmap download(String url) {
 
         Bitmap res = null;
@@ -149,7 +152,7 @@ public class FragmentB extends Fragment {
         if (res != null)
             Log.i("TAG", "doInBackground:  downloaded");
         return res;
-    }
+    }*/
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {

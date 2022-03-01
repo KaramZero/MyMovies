@@ -38,6 +38,10 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class FragmentA extends Fragment {
 
     private RecyclerView recyclerView;
@@ -83,16 +87,14 @@ public class FragmentA extends Fragment {
         getData();
 
 
+
         handler = new Handler(Looper.myLooper()) {
             @Override
             public void handleMessage(@NonNull Message msg) {
-                if (msg.obj == null) {
-                    MyAsyncTask myAsyncTask = new MyAsyncTask();
-                    myAsyncTask.execute(moviesList);
-                } else {
+
                     progressBar.setVisibility(View.INVISIBLE);
                     recyclerView.setAdapter(new MyRecyclerAdapter(context, moviesList));
-                }
+
             }
         };
 
@@ -100,7 +102,32 @@ public class FragmentA extends Fragment {
 
 
     public void getData() {
-        new Thread() {
+
+
+
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<Movie>> call = apiInterface.getMovies();
+
+        call.enqueue(new Callback<List<Movie>>() {
+            @Override
+            public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
+                moviesList= response.body();
+                handler.sendEmptyMessage(0);
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Movie>> call, Throwable t) {
+
+            }
+        });
+
+
+
+
+
+      /*  new Thread() {
             @Override
             public void run() {
                 String response = null;
@@ -153,9 +180,9 @@ public class FragmentA extends Fragment {
                 Log.i("TAG", "Internet : List Downloaded ");
                 handler.sendEmptyMessage(0);
             }
-        }.start();
+        }.start();*/
     }
-
+/*
     private String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
@@ -175,8 +202,8 @@ public class FragmentA extends Fragment {
             }
         }
         return sb.toString();
-    }
-
+    }*/
+/*
     public List<Movie> downloadImages(List<Movie> movies) {
         Bitmap bitmap = null;
         InputStream inputStream = null;
@@ -236,5 +263,5 @@ public class FragmentA extends Fragment {
             msg.obj = movies;
             handler.sendMessage(msg);
         }
-    }
+    }*/
 }

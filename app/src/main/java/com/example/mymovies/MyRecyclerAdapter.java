@@ -20,6 +20,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -56,7 +58,12 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
         holder.progressBar.setVisibility(View.VISIBLE);
 
-        holder.imageView.setImageBitmap(moviesList.get(position).getBitmap());
+        Picasso.with(context).
+                load(moviesList.get(position).getImage())
+                .into(holder.imageView);
+
+
+      //  holder.imageView.setImageBitmap(moviesList.get(position).getBitmap());
 
         holder.progressBar.setVisibility(View.INVISIBLE);
 
@@ -79,11 +86,11 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
     public int getItemCount() {
         return moviesList.size();
     }
-
+/*
      public void setImageView(String url) {
         MyAsyncTask myAsync = new MyAsyncTask();
         myAsync.execute(url);
-    }
+    }*/
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -113,7 +120,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         }
     }
 
-
+/*
     public class MyAsyncTask extends AsyncTask<String, Void, Bitmap> {
 
         @Override
@@ -169,6 +176,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             return bitmap;
         }
 
-    }
+    }*/
 
 }
